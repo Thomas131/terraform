@@ -20,5 +20,7 @@ WORKDIR $GOPATH/src/github.com/hashicorp/terraform
 COPY . .
 RUN /bin/bash ./scripts/build.sh
 
-WORKDIR $GOPATH
-ENTRYPOINT ["terraform"]
+FROM alpine:3
+RUN apk add --no-cache git curl bash openssh
+COPY --from=0 /go/bin/terraform /bin/terraform
+ENTRYPOINT ["/bin/terraform"]
